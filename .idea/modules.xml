@@ -3,6 +3,8 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/postgreSetup.iml" filepath="$PROJECT_DIR$/.idea/modules/postgreSetup.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/postgreSetup_main.iml" filepath="$PROJECT_DIR$/.idea/modules/postgreSetup_main.iml" group="postgreSetup" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/postgreSetup_test.iml" filepath="$PROJECT_DIR$/.idea/modules/postgreSetup_test.iml" group="postgreSetup" />
     </modules>
   </component>
 </project>
