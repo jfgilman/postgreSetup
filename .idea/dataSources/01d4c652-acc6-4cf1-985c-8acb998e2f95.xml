@@ -9,7 +9,8 @@
     </database>
     <schema id="3" parent="2" name="public">
       <ObjectId>2200</ObjectId>
-      <IntrospectionTimestamp>2017-02-15.10:18:02.557</IntrospectionTimestamp>
+      <IntrospectionTimestamp>2017-02-15.10:54:26.977</IntrospectionTimestamp>
+      <IntrospectionStateNumber>16467</IntrospectionStateNumber>
       <Current>1</Current>
       <Visible>1</Visible>
     </schema>
@@ -30,5 +31,58 @@
       <IntrospectionTimestamp>2017-02-15.09:13:38.928</IntrospectionTimestamp>
       <IntrospectionStateNumber>2</IntrospectionStateNumber>
     </schema>
+    <table id="9" parent="3" name="matchup">
+      <ObjectId>18995</ObjectId>
+      <StateNumber>16467</StateNumber>
+    </table>
+    <column id="10" parent="9" name="gameid">
+      <Position>1</Position>
+      <DataType>integer|0</DataType>
+      <NotNull>1</NotNull>
+      <StateNumber>16467</StateNumber>
+    </column>
+    <column id="11" parent="9" name="topplayer">
+      <Position>2</Position>
+      <DataType>char(50)|0</DataType>
+      <NotNull>1</NotNull>
+      <StateNumber>16467</StateNumber>
+    </column>
+    <column id="12" parent="9" name="bottomplayer">
+      <Position>3</Position>
+      <DataType>char(50)|0</DataType>
+      <NotNull>1</NotNull>
+      <StateNumber>16467</StateNumber>
+    </column>
+    <column id="13" parent="9" name="date">
+      <Position>4</Position>
+      <DataType>integer|0</DataType>
+      <StateNumber>16467</StateNumber>
+    </column>
+    <column id="14" parent="9" name="version">
+      <Position>5</Position>
+      <DataType>integer|0</DataType>
+      <StateNumber>16467</StateNumber>
+    </column>
+    <column id="15" parent="9" name="winner">
+      <Position>6</Position>
+      <DataType>char(50)|0</DataType>
+      <StateNumber>16467</StateNumber>
+    </column>
+    <column id="16" parent="9" name="seed">
+      <Position>7</Position>
+      <DataType>integer|0</DataType>
+      <StateNumber>16467</StateNumber>
+    </column>
+    <index id="17" parent="9" name="matchup_pkey">
+      <ObjectId>18998</ObjectId>
+      <ColNames>gameid</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <key id="18" parent="9" name="matchup_pkey">
+      <ObjectId>18999</ObjectId>
+      <ColNames>gameid</ColNames>
+      <UnderlyingIndexName>matchup_pkey</UnderlyingIndexName>
+      <Primary>1</Primary>
+    </key>
   </database-model>
 </dataSource>
