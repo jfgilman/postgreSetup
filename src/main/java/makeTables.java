@@ -34,27 +34,29 @@ public class makeTables {
         }
 
         if (c != null) {
-            System.out.println("You made it, take control your database now!");
+            System.out.println("Connected to database");
         } else {
             System.out.println("Failed to make connection!");
         }
 
         try {
             stmt = c.createStatement();
-            String sql = "CREATE TABLE PLAYERS " +
+            String sql = "CREATE TABLE IF NOT EXISTS PLAYERS " +
                     "(PLAYERID INT PRIMARY KEY     NOT NULL," +
-                    " NAME    CHAR(50))";
+                    " NAME    CHAR(50)," +
+                    " GAMECOUNT  INT)";
             stmt.executeUpdate(sql);
-
+            stmt.close();
         } catch (SQLException e) {
-            System.err.println( e.getClass().getName()+": "+ e.getMessage() );
-            System.exit(0);
+            System.out.println("Table Creation Failed");
+            e.printStackTrace();
+            return;
         }
         System.out.println("PLAYERS table created");
 
         try {
             stmt = c.createStatement();
-            String sql = "CREATE TABLE MATCHUP " +
+            String sql = "CREATE TABLE IF NOT EXISTS MATCHUP " +
                     "(GAMEID INT PRIMARY KEY     NOT NULL," +
                     " TOPPLAYER      INT REFERENCES PLAYERS (PLAYERID), " +
                     " BOTTOMPLAYER    INT REFERENCES PLAYERS (PLAYERID), " +
@@ -65,58 +67,89 @@ public class makeTables {
                     " TOPDECK    INTEGER[], " +
                     " BOTTOMDECK    integer[])";
             stmt.executeUpdate(sql);
-
+            stmt.close();
         } catch (SQLException e) {
-            System.err.println( e.getClass().getName()+": "+ e.getMessage() );
-            System.exit(0);
+            System.out.println("Table Creation Failed");
+            e.printStackTrace();
+            return;
         }
         System.out.println("MATCHUP table created");
 
-
         try {
             stmt = c.createStatement();
-            String sql = "CREATE TABLE PLAYERACTIONS " +
-                    "(PLAYERID INT REFERENCES PLAYERS (PLAYERID)," +
-                    " GAMEID   INT REFERENCES MATCHUP (GAMEID), " +
-                    " ACTIONSET INT PRIMARY KEY  NOT NULL)";
-
-            stmt.executeUpdate(sql);
-
-
-
-        } catch (SQLException e) {
-            System.err.println( e.getClass().getName()+": "+ e.getMessage() );
-            System.exit(0);
-        }
-        System.out.println("PLAYERACTIONS table created");
-
-        try {
-            stmt = c.createStatement();
-            String sql = "CREATE TABLE ACTIONS " +
+            String sql = "CREATE TABLE IF NOT EXISTS ACTIONS " +
                     "(TICK INT PRIMARY KEY, " +
-                    " LOCATION INTEGER[], " +
-                    " CARDINDEX INT, " +
-                    " ACTIONSET INT REFERENCES playeractions (ACTIONSET))";
+                    " PLAYERID INT REFERENCES PLAYERS (PLAYERID)," +
+                    " GAMEID   INT REFERENCES MATCHUP (GAMEID), " +
+                    " DROPX INT, " +
+                    " DROPY INT, " +
+                    " CARDINDEX INT)";
             stmt.executeUpdate(sql);
-
+            stmt.close();
         } catch (SQLException e) {
-            System.err.println( e.getClass().getName()+": "+ e.getMessage() );
-            System.exit(0);
+            System.out.println("Table Creation Failed");
+            e.printStackTrace();
+            return;
         }
         System.out.println("ACTIONS table created");
 
         try {
             stmt = c.createStatement();
-            String sql = "CREATE TABLE CARDS " +
+            String sql = "CREATE TABLE IF NOT EXISTS CARDS " +
                     "(CARDID INT PRIMARY KEY     NOT NULL," +
                     " NAME    CHAR(50))";
             stmt.executeUpdate(sql);
-
+            stmt.close();
         } catch (SQLException e) {
-            System.err.println( e.getClass().getName()+": "+ e.getMessage() );
-            System.exit(0);
+            System.out.println("Table Creation Failed");
+            e.printStackTrace();
+            return;
         }
         System.out.println("CARDS table created");
+
+
+        try {
+            stmt = c.createStatement();
+            String sql = "INSERT INTO PLAYERS (PLAYERID, NAME, GAMECOUNT) "
+                    + "VALUES (1, 'James G', 0);";
+            stmt.executeUpdate(sql);
+
+            sql = "INSERT INTO PLAYERS (PLAYERID, NAME, GAMECOUNT) "
+                    + "VALUES (2, 'Nick M', 0);";
+            stmt.executeUpdate(sql);
+
+            sql = "INSERT INTO PLAYERS (PLAYERID, NAME, GAMECOUNT) "
+                    + "VALUES (3, 'Maria J', 0);";
+            stmt.executeUpdate(sql);
+
+            sql = "INSERT INTO PLAYERS (PLAYERID, NAME, GAMECOUNT) "
+                    + "VALUES (4, 'Nick K', 0);";
+            stmt.executeUpdate(sql);
+
+            sql = "INSERT INTO PLAYERS (PLAYERID, NAME, GAMECOUNT) "
+                    + "VALUES (5, 'Eric R', 0);";
+            stmt.executeUpdate(sql);
+
+            sql = "INSERT INTO PLAYERS (PLAYERID, NAME, GAMECOUNT) "
+                    + "VALUES (6, 'Tea B', 0);";
+            stmt.executeUpdate(sql);
+
+            sql = "INSERT INTO PLAYERS (PLAYERID, NAME, GAMECOUNT) "
+                    + "VALUES (7, 'Lisa W', 0);";
+            stmt.executeUpdate(sql);
+
+            sql = "INSERT INTO PLAYERS (PLAYERID, NAME, GAMECOUNT) "
+                    + "VALUES (8, 'Eric L', 0);";
+            stmt.executeUpdate(sql);
+
+            stmt.close();
+        } catch (SQLException e) {
+            System.out.println("Data Entry Failed");
+            e.printStackTrace();
+            return;
+        }
+
+        System.out.println("Players Entered");
 
     }
 
