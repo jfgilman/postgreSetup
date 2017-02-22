@@ -63,9 +63,7 @@ public class makeTables {
                     " TIME        TIMESTAMP , " +
                     " VERSION    INT, " +
                     " WINNER    INT REFERENCES PLAYERS (PLAYERID), " +
-                    " SEED     INT, " +
-                    " TOPDECK    INTEGER[], " +
-                    " BOTTOMDECK    integer[])";
+                    " SEED     INT)";
             stmt.executeUpdate(sql);
             stmt.close();
         } catch (SQLException e) {
@@ -95,9 +93,10 @@ public class makeTables {
 
         try {
             stmt = c.createStatement();
-            String sql = "CREATE TABLE IF NOT EXISTS CARDS " +
-                    "(CARDID INT PRIMARY KEY     NOT NULL," +
-                    " NAME    CHAR(50))";
+            String sql = "CREATE TABLE IF NOT EXISTS DECKS " +
+                    "(PLAYERID INT REFERENCES PLAYERS (PLAYERID)," +
+                    " GAMEID   INT REFERENCES MATCHUP (GAMEID), " +
+                    " CARDNAME   CHAR(20))";
             stmt.executeUpdate(sql);
             stmt.close();
         } catch (SQLException e) {
@@ -105,7 +104,8 @@ public class makeTables {
             e.printStackTrace();
             return;
         }
-        System.out.println("CARDS table created");
+        System.out.println("Decks table created");
+
 
 
         try {
