@@ -1,31 +1,38 @@
-import java.sql.*;
-import java.sql.DriverManager;
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Timer;
+import java.util.TimerTask;
 
-public class makeTables {
+/**
+ * Created by jfgilman on 2/25/17.
+ */
+public class DBClass {
 
-    public static void main(String[] argv) {
+    static final String DBUrl = System.getProperty("jdbc:postgresql://localhost:5432/saTest");
+    static final String DBUser = System.getProperty("postgres");
+    static final String DBPassword = System.getProperty("dbpass");
+
+    Connection c = null;
+    Statement stmt = null;
+
+    batch b = new batch();
+
+    Timer timer = new Timer();
+
+    public DBClass() {
 
         try {
-
             Class.forName("org.postgresql.Driver");
-
         } catch (ClassNotFoundException e) {
-
-            System.out.println("JDBC Driver?");
+            System.out.println("Driver?");
             e.printStackTrace();
             return;
         }
 
-        Connection c = null;
-        Statement stmt = null;
-
         try {
-            c = DriverManager.getConnection(
-                    "jdbc:postgresql://localhost:5432/saTest", "postgres",
-                    "dbpass");
+            c = DriverManager.getConnection(DBUrl, DBUser, DBPassword);
 
         } catch (SQLException e) {
             System.out.println("Connection Failed");
@@ -39,6 +46,10 @@ public class makeTables {
             System.out.println("Failed to make connection!");
         }
 
+    }
+
+    public void createTables(){
+
         try {
             stmt = c.createStatement();
             String sql = "CREATE TABLE IF NOT EXISTS PLAYERS " +
@@ -48,7 +59,7 @@ public class makeTables {
             stmt.executeUpdate(sql);
             stmt.close();
         } catch (SQLException e) {
-            System.out.println("Table Creation Failed");
+            System.out.println("Table Creation Failed!");
             e.printStackTrace();
             return;
         }
@@ -57,7 +68,7 @@ public class makeTables {
         try {
             stmt = c.createStatement();
             String sql = "CREATE TABLE IF NOT EXISTS MATCHUP " +
-                    "(GAMEID INT PRIMARY KEY     NOT NULL," +
+                    "(GAMEID INT PRIMARY KEY     NOT NULL ," +
                     " TOPPLAYER      INT REFERENCES PLAYERS (PLAYERID), " +
                     " BOTTOMPLAYER    INT REFERENCES PLAYERS (PLAYERID), " +
                     " GAMEDATE        TIMESTAMP , " +
@@ -76,7 +87,7 @@ public class makeTables {
         try {
             stmt = c.createStatement();
             String sql = "CREATE TABLE IF NOT EXISTS ACTIONS " +
-                    "(TICK INT , " +
+                    "(TICK INT, " +
                     " PLAYERID INT REFERENCES PLAYERS (PLAYERID)," +
                     " GAMEID   INT REFERENCES MATCHUP (GAMEID), " +
                     " DROPX INT, " +
@@ -96,7 +107,7 @@ public class makeTables {
             stmt = c.createStatement();
             String sql = "CREATE TABLE IF NOT EXISTS DECKS " +
                     "(PLAYERID INT REFERENCES PLAYERS (PLAYERID)," +
-                    " GAMEID   INT REFERENCES MATCHUP (GAMEID), " +
+                    " GAMEID   INT REFERENCES MATCHUP (GAMEID)," +
                     " CARDNAME   CHAR(20))";
             stmt.executeUpdate(sql);
             stmt.close();
@@ -106,52 +117,25 @@ public class makeTables {
             return;
         }
         System.out.println("Decks table created");
-
-
-
-/*        try {
-            stmt = c.createStatement();
-            String sql = "INSERT INTO PLAYERS (PLAYERID, NAME, GAMECOUNT) "
-                    + "VALUES (1, 'James G', 0);";
-            stmt.executeUpdate(sql);
-
-            sql = "INSERT INTO PLAYERS (PLAYERID, NAME, GAMECOUNT) "
-                    + "VALUES (2, 'Nick M', 0);";
-            stmt.executeUpdate(sql);
-
-            sql = "INSERT INTO PLAYERS (PLAYERID, NAME, GAMECOUNT) "
-                    + "VALUES (3, 'Maria J', 0);";
-            stmt.executeUpdate(sql);
-
-            sql = "INSERT INTO PLAYERS (PLAYERID, NAME, GAMECOUNT) "
-                    + "VALUES (4, 'Nick K', 0);";
-            stmt.executeUpdate(sql);
-
-            sql = "INSERT INTO PLAYERS (PLAYERID, NAME, GAMECOUNT) "
-                    + "VALUES (5, 'Eric R', 0);";
-            stmt.executeUpdate(sql);
-
-            sql = "INSERT INTO PLAYERS (PLAYERID, NAME, GAMECOUNT) "
-                    + "VALUES (6, 'Tea B', 0);";
-            stmt.executeUpdate(sql);
-
-            sql = "INSERT INTO PLAYERS (PLAYERID, NAME, GAMECOUNT) "
-                    + "VALUES (7, 'Lisa W', 0);";
-            stmt.executeUpdate(sql);
-
-            sql = "INSERT INTO PLAYERS (PLAYERID, NAME, GAMECOUNT) "
-                    + "VALUES (8, 'Eric L', 0);";
-            stmt.executeUpdate(sql);
-
-            stmt.close();
-        } catch (SQLException e) {
-            System.out.println("Data Entry Failed");
-            e.printStackTrace();
-            return;
-        }
-
-        System.out.println("Players Entered");*/
-
     }
 
+    public void addGameRecord(game g){
+        b.games.add(g);
+    }
+
+    public void uploadBatch(){
+        b.upload();
+        b.games.clear();
+    }
+
+    public void startTimer(){
+
+        timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                uploadBatch();
+            }
+        }, 30*60*1000, 30*60*1000);
+
+    }
 }
