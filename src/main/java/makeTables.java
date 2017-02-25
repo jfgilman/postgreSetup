@@ -60,7 +60,7 @@ public class makeTables {
                     "(GAMEID INT PRIMARY KEY     NOT NULL," +
                     " TOPPLAYER      INT REFERENCES PLAYERS (PLAYERID), " +
                     " BOTTOMPLAYER    INT REFERENCES PLAYERS (PLAYERID), " +
-                    " TIME        CHAR(20) , " +
+                    " GAMEDATE        TIMESTAMP , " +
                     " VERSION    INT, " +
                     " WINNER    INT REFERENCES PLAYERS (PLAYERID), " +
                     " SEED     INT)";
@@ -76,12 +76,13 @@ public class makeTables {
         try {
             stmt = c.createStatement();
             String sql = "CREATE TABLE IF NOT EXISTS ACTIONS " +
-                    "(TICK INT PRIMARY KEY, " +
+                    "(TICK INT , " +
                     " PLAYERID INT REFERENCES PLAYERS (PLAYERID)," +
                     " GAMEID   INT REFERENCES MATCHUP (GAMEID), " +
                     " DROPX INT, " +
                     " DROPY INT, " +
-                    " CARDINDEX INT)";
+                    " CARDINDEX INT," +
+                    " PRIMARY KEY (PLAYERID, GAMEID, TICK))";
             stmt.executeUpdate(sql);
             stmt.close();
         } catch (SQLException e) {
