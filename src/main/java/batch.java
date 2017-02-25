@@ -34,15 +34,12 @@ public class batch {
             Class.forName("org.postgresql.Driver");
 
         } catch (ClassNotFoundException e) {
-
-            System.out.println("Where is your PostgreSQL JDBC Driver? "
-                    + "Include in your library path!");
             e.printStackTrace();
             return;
 
         }
 
-        Connection c = null;
+        Connection c;
         Statement stmt = null;
 
         try {
@@ -51,7 +48,6 @@ public class batch {
                     "dbpass");
 
         } catch (SQLException e) {
-            System.out.println("Connection Failed");
             e.printStackTrace();
             return;
         }
@@ -63,25 +59,37 @@ public class batch {
                 // adding matchup info
                 stmt = c.createStatement();
                 String sql = "INSERT INTO MATCHUP (GAMEID, TOPPLAYER, BOTTOMPLAYER, DATE, VERSION, WINNER, SEED) "
-                        + "VALUES (g.match.gameid, g.matchup.topPlayer, g.matchup.bottomPlayer, g.matchup.time," +
-                        " g.matchup.version, g.matchup.winner, g.matchup.seed );";
+                        + "VALUES (" + g.matchup.gameid + "," + g.matchup.topPlayer + "," + g.matchup.bottomPlayer + "," +
+                        g.matchup.time + "," + g.matchup.version +","+ g.matchup.winner + ","  + g.matchup.seed + ");";
                 stmt.executeUpdate(sql);
 
                 // adding each players deck
                 for(String card : g.playerOneDeck.cards){
                     String sql2 = "INSERT INTO DECKS (GAMEID, PLAYERID, CARDNAME) "
-                            + "VALUES (g.playerOneDeck.gameid, g.playerOneDeck.playerid,  "+card+");";
+                            + "VALUES (" + g.playerOneDeck.gameid + "," + g.playerOneDeck.playerid + ", " + card + ");";
                     stmt.executeUpdate(sql2);
                 }
 
                 for(String card : g.playerTwoDeck.cards){
                     String sql2 = "INSERT INTO DECKS (GAMEID, PLAYERID, CARDNAME) "
-                                    + "VALUES (g.playerTwoDeck.gameid, g.playerTwoDeck.playerid, "+card+");";
+                            + "VALUES (" + g.playerTwoDeck.gameid + "," + g.playerTwoDeck.playerid + ", " + card + ");";
                     stmt.executeUpdate(sql2);
                 }
-                
-                // need to update actions
 
+                // need to update actions
+                for(actions.action a : g.playerOneActions.actionList){
+                    String sql3 = "INSERT INTO DECKS (TICK, GAMEID, PLAYERID, DROPX, DROPY, CARDINDEX) "
+                            + "VALUES (" + a.tick + "," + g.playerOneActions.gameid + "," + g.playerOneActions.playerid + "," +
+                            a.x + "," +a.y+ "," + a.cardIndex + ");";
+                    stmt.executeUpdate(sql3);
+                }
+
+                for(actions.action a : g.playerTwoActions.actionList){
+                    String sql3 = "INSERT INTO DECKS (TICK, GAMEID, PLAYERID, DROPX, DROPY, CARDINDEX) "
+                            + "VALUES ("+a.tick +"," + g.playerTwoActions.gameid + "," + g.playerTwoActions.playerid + "," +
+                            a.x + "," +a.y+ "," + a.cardIndex + ");";
+                    stmt.executeUpdate(sql3);
+                }
 
             }
 
