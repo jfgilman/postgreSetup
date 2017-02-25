@@ -60,7 +60,7 @@ public class makeTables {
                     "(GAMEID INT PRIMARY KEY     NOT NULL," +
                     " TOPPLAYER      INT REFERENCES PLAYERS (PLAYERID), " +
                     " BOTTOMPLAYER    INT REFERENCES PLAYERS (PLAYERID), " +
-                    " TIME        TIMESTAMP , " +
+                    " TIME        CHAR(20) , " +
                     " VERSION    INT, " +
                     " WINNER    INT REFERENCES PLAYERS (PLAYERID), " +
                     " SEED     INT)";

@@ -20,18 +20,18 @@ public class actions {
         actionList.add(a);
     }
 
-    public class action {
-        public int tick;
-        public int cardIndex;
-        public int x;
-        public int y;
+    public static class action {
+            public int tick;
+            public int cardIndex;
+            public int x;
+            public int y;
 
-        public action(int tick, int cardIndex, int x, int y){
-            this.tick = tick;
-            this.cardIndex = cardIndex;
-            this.x = x;
-            this.y = y;
-        }
+            public action(int tick, int cardIndex, int x, int y){
+                this.tick = tick;
+                this.cardIndex = cardIndex;
+                this.x = x;
+                this.y = y;
+            }
 
     }
 }
